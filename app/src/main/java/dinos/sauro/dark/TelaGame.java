@@ -20,49 +20,31 @@ public class TelaGame extends AGScene {
     AGTimer delayObstaculo= null;
     int spriteObstaculo;
     //DEFINE A VELOCIDADE DO SOLO E DOS OBSTACULOS
-    int velocidade=-15;
+    int velocidade= -25;
     Random gerador = new Random();
 
-    //ATUALIZA A POSIÇÃO E CHECA COLISAO
-    private  void atualizaObastaculoColisao(){
-        for (AGSprite obstaculo: vetObstaculos1){
-            obstaculo.vrPosition.setX(obstaculo.vrPosition.getX() +
-                 velocidade    );
-            if(dino.collide(obstaculo)){
-                return;
-            }
-        }
-        for (AGSprite obstaculo: vetObstaculos2) {
-            obstaculo.vrPosition.setX(obstaculo.vrPosition.getX() +
-                    velocidade);
-            if (dino.collide(obstaculo)) {
-                return;
-            }
-        }
-        for (AGSprite obstaculo: vetObstaculos4) {
-            obstaculo.vrPosition.setX(obstaculo.vrPosition.getX() +
-                    velocidade);
-            if (dino.collide(obstaculo)) {
-                return;
-            }
-        }
-    }
-    private void criaObstaculo(){
-        spriteObstaculo= gerador.nextInt(2);
+
+
+
+
+
+
+   private void criaObstaculo(){
+        spriteObstaculo= gerador.nextInt(3);
         if (spriteObstaculo==0) {
             AGSprite novoSprite = null;
-        /*    for (AGSprite obstaculo : vetObstaculos1) {
+       for (AGSprite obstaculo : vetObstaculos1 ) {
                 if (obstaculo.vrPosition.getX() < -obstaculo.getSpriteWidth() / 2 ) {
                     novoSprite = obstaculo;
                     delayObstaculo.restart();
                     novoSprite.vrPosition.setX(AGScreenManager.iScreenWidth + obstaculo.getSpriteWidth() / 2);
-                    /*FORLUMA QUE INVENTEI PARA O DINO FICAR SOBRE O TECIDO BLACK E NO LUGAR CERTO SOBRE  O SOLO/ RESPONSIVO/ 20%  É ONDE O SOLO SE ENCONTRA
+                    //FORLUMA QUE INVENTEI PARA O Obstaculo FICAR SOBRE O TECIDO BLACK E NO LUGAR CERTO SOBRE  O SOLO/ RESPONSIVO/ 20%  É ONDE O SOLO SE ENCONTRA
                     novoSprite.vrPosition.setY((obstaculo.getSpriteHeight()) + (AGScreenManager.iScreenHeight * 10 / 100));
-                    novoSprite.moveTo(4000 ,new AGVector2D(0,novoSprite.vrPosition.getY()));
+
                     break;
                 }
             }
-*/
+
 
 
             if (novoSprite == null) {
@@ -75,14 +57,17 @@ public class TelaGame extends AGScene {
                 novoSprite.vrPosition.setY((novoSprite.getSpriteHeight()) + (AGScreenManager.iScreenHeight * 10 / 100));
                 novoSprite.setScreenPercent(16, 32);
                 novoSprite.addAnimation(1, false, 0, 0);
-                novoSprite.moveTo(4000 ,new AGVector2D(0,novoSprite.vrPosition.getY()));
+
+
             }
 
+
         }
-        /*
+
         if (spriteObstaculo==1) {
             AGSprite novoSprite = null;
             for (AGSprite obstaculo : vetObstaculos2) {
+
                 if (obstaculo.vrPosition.getX() < -obstaculo.getSpriteWidth() / 2) {
                     novoSprite = obstaculo;
                     delayObstaculo.restart();
@@ -104,7 +89,7 @@ public class TelaGame extends AGScene {
                 novoSprite.vrPosition.setY((novoSprite.getSpriteHeight()) + (AGScreenManager.iScreenHeight * 10 / 100));
                 novoSprite.setScreenPercent(16, 32);
                 novoSprite.addAnimation(1, false, 0, 0);
-                novoSprite.moveTo(4000 ,new AGVector2D(0,novoSprite.vrPosition.getY()));
+
             }
 
         }
@@ -132,15 +117,44 @@ public class TelaGame extends AGScene {
                 novoSprite.vrPosition.setY((novoSprite.getSpriteHeight()) + (AGScreenManager.iScreenHeight * 10 / 100));
                 novoSprite.setScreenPercent(16, 32);
                 novoSprite.addAnimation(1, false, 0, 0);
-                novoSprite.moveTo(4000 ,new AGVector2D(0,novoSprite.vrPosition.getY()));
+                //novoSprite.moveTo(4000 ,new AGVector2D(0,novoSprite.vrPosition.getY()));
             }
 
         }
 
-            */
+
     }
 
 
+    //ATUALIZA A POSIÇÃO E CHECA COLISAO
+    private  void atualizaObastaculoColisao(){
+
+        for (AGSprite obstaculo: vetObstaculos1){
+
+            obstaculo.vrPosition.setX(obstaculo.vrPosition.getX() +
+                    velocidade);
+
+            if(dino.collide(obstaculo)){
+                return;
+            }
+        }
+        for (AGSprite obstaculo: vetObstaculos2) {
+            obstaculo.vrPosition.setX(obstaculo.vrPosition.getX() +
+                    velocidade);
+            dino.setCurrentAnimation(1);
+            if (dino.collide(obstaculo)) {
+                return;
+            }
+        }
+        for (AGSprite obstaculo: vetObstaculos4) {
+            obstaculo.vrPosition.setX(obstaculo.vrPosition.getX() +
+                    velocidade);
+            dino.setCurrentAnimation(1);
+            if (dino.collide(obstaculo)) {
+                return;
+            }
+        }
+    }
 
     private void sobePulo(){
 
@@ -193,7 +207,9 @@ public class TelaGame extends AGScene {
         dino.addAnimation(1, true,0,1);
 
 
-
+        vetObstaculos1 = new ArrayList<AGSprite>();
+        vetObstaculos2 = new ArrayList<AGSprite>();
+        vetObstaculos4 = new ArrayList<AGSprite>();
 
 
 
@@ -247,6 +263,9 @@ public class TelaGame extends AGScene {
 
     @Override
     public void loop() {
+        atualizaObastaculoColisao();
+        criaObstaculo();
+
         timerPulo.update();
         delayObstaculo.update();
         descePulo();
@@ -263,10 +282,9 @@ public class TelaGame extends AGScene {
              dino.setCurrentAnimation(0);
         }
 
-     //   if(delayObstaculo.isTimeEnded()){
-            criaObstaculo();
-     //   }
 
-      //  atualizaObastaculoColisao();
+
+
+
     }
 }
